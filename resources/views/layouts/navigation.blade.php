@@ -18,10 +18,6 @@
                     {{ Auth::user()->name }}
                 </span>
 
-                <a href="{{ route('profile.edit') }}" class="text-sm px-3 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
-                    Profile
-                </a>
-
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="text-sm px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600 transition">

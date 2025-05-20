@@ -18,6 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Facades\Filament;
+use App\Filament\Pages\Dashboard;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -38,10 +39,18 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('Inventory App SMKN 4')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#6366F1',
+                'danger' => '#EF4444',
+                'success' => '#10B981',
+                'warning' => '#F59E0B',
             ])
+            ->darkMode()
+            ->sidebarCollapsibleOnDesktop()
+            ->maxContentWidth('full')
+
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

@@ -12,6 +12,7 @@ class Item extends Model
         'supplier_id',
         'stock',
         'condition',
+        'image',
     ];
 
     public function category()

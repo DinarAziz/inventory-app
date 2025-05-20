@@ -3,8 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ItemResource\Pages;
-use App\Models\Category;
-use App\Models\Supplier;
 use App\Models\Item;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -44,52 +42,65 @@ class ItemResource extends Resource
         return auth()->user()?->role === 'admin';
     }
 
-   public static function form(Form $form): Form
-{
-    return $form->schema([
-        Forms\Components\TextInput::make('name')
-            ->required()
-            ->maxLength(255),
-        Forms\Components\Select::make('category_id')
-            ->relationship('category', 'name')
-            ->required()
-            ->label('Kategori'),
-        Forms\Components\Select::make('supplier_id')
-            ->relationship('supplier', 'name')
-            ->required()
-            ->label('Supplier'),
-        Forms\Components\TextInput::make('stock')
-            ->numeric()
-            ->required(),
-        Forms\Components\Select::make('condition')
-            ->options([
-                'baik' => 'Baik',
-                'rusak' => 'Rusak',
-            ])
-            ->required(),
-    ]);
-}
+    public static function form(Form $form): Form
+    {
+        return $form->schema([
+            Forms\Components\TextInput::make('name')
+                ->required()
+                ->maxLength(255),
+
+            Forms\Components\Select::make('category_id')
+                ->relationship('category', 'name')
+                ->required()
+                ->label('Kategori'),
+
+            Forms\Components\Select::make('supplier_id')
+                ->relationship('supplier', 'name')
+                ->required()
+                ->label('Supplier'),
+
+            Forms\Components\TextInput::make('stock')
+                ->numeric()
+                ->required(),
+
+            Forms\Components\Select::make('condition')
+                ->options([
+                    'baik' => 'Baik',
+                    'rusak' => 'Rusak',
+                ])
+                ->required(),
+
+            Forms\Components\FileUpload::make('image')
+                ->image()
+                ->imagePreviewHeight('150')
+                ->directory('item-images')
+                ->maxSize(1024)
+                ->label('Foto Barang'),
+        ]);
+    }
 
     public static function table(Table $table): Table
-{
-    return $table->columns([
-            Tables\Columns\TextColumn::make('name')->label('Nama')->searchable(),
-            Tables\Columns\TextColumn::make('category.name')->label('Kategori'),
-            Tables\Columns\TextColumn::make('supplier.name')->label('Supplier'),
-            Tables\Columns\TextColumn::make('stock')->label('Stok'),
-            Tables\Columns\TextColumn::make('condition')->label('Kondisi'),
-        ])
-        ->filters([])
-        ->actions([
-            Tables\Actions\EditAction::make(),
-        ])
-        ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]),
-        ]);
-}
-
+    {
+        return $table->columns([
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Foto')
+                    ->circular(),
+                Tables\Columns\TextColumn::make('name')->label('Nama')->searchable(),
+                Tables\Columns\TextColumn::make('category.name')->label('Kategori'),
+                Tables\Columns\TextColumn::make('supplier.name')->label('Supplier'),
+                Tables\Columns\TextColumn::make('stock')->label('Stok'),
+                Tables\Columns\TextColumn::make('condition')->label('Kondisi'),
+            ])
+            ->filters([])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
 
     public static function getRelations(): array
     {
